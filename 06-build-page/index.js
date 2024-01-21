@@ -70,7 +70,6 @@ fs.readdir('06-build-page/assets', { withFileTypes: true }, (err, folders) => {
                 if (file.isFile()) {
                   fs.readFile(
                     path.join(__dirname, `assets/${folder.name}`, file.name),
-                    'utf-8',
                     (err, data) => {
                       if (err) throw err;
                       fs.writeFile(
@@ -84,6 +83,23 @@ fs.readdir('06-build-page/assets', { withFileTypes: true }, (err, folders) => {
                           if (err) throw err;
                         },
                       );
+
+                      const sourceFile = path.join(
+                        __dirname,
+                        `assets/${folder.name}`,
+                        file.name,
+                      );
+                      const targetFile = path.join(
+                        __dirname,
+                        `project-dist/assets/${folder.name}`,
+                        file.name,
+                      );
+
+                      fs.copyFile(sourceFile, targetFile, (err) => {
+                        if (err) {
+                          console.error('Error:', err);
+                        }
+                      });
                     },
                   );
                 }
